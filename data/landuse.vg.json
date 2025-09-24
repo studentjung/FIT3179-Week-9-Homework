@@ -1,0 +1,54 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "width": 1000,
+  "height": 1000,
+  "projection": {"type": "mercator"},
+  "title": "Land Use in Victoria",
+  "layer": [
+    {
+      "data": {
+        "url": "data/vic_land_use.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "vic_bounds"
+        }
+      },
+      "mark": {"type": "geoshape", "stroke": "black", "fill":"white"}
+    },
+    {
+      "data": {
+        "url": "data/vic_land_use.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "land_use"
+        }
+      },
+      "mark": {"type": "geoshape"},
+      "encoding": {
+        "color": {"field": "properties.LU_CLASS", "type": "nominal"},
+        "tooltip": [
+          {"field": "properties.LU_CLASS", "type": "nominal"},
+          {"field": "properties.LU_TYPE", "type": "nominal"},
+          {"field": "properties.Area_ha", "type": "quantitative"}
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/vic_land_use.topojson",
+        "format": {
+          "type": "topojson",
+          "feature": "vic_bounds"
+        }
+      },
+      "mark": "text",
+      "encoding": {
+        "text": { "field": "propertiesSAL_NAME21" },
+        "longitude": { "field": "your_lon_field" },
+        "latitude": { "field": "your_lat_field" },
+        "size": { "value": 8 },
+        "color": { "value": "black" }
+      }
+    }
+  ]
+}
