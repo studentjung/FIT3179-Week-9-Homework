@@ -8,7 +8,7 @@
     "center": [144.9631, -37.8136],
     "rotate": [215, 90, 0]
   },
-  "title": "Percentage of land zoned Residential per suburb in the future of Outer West Melbourne",
+  "title": "Percentage of residential land area per suburb in the future of Outer West Melbourne",
   "layer": [
     {
       "data": {
