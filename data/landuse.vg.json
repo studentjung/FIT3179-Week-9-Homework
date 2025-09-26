@@ -1,54 +1,76 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "width": 1000,
-  "height": 1000,
-  "projection": {"type": "mercator"},
-  "title": "Land Use in Victoria",
+  "width": 700,
+  "height": 700,
+  "background": "#f8f8f8",
+  "projection": {
+    "type": "azimuthalEqualArea",
+    "center": [144.9631, -37.8136],
+    "rotate": [215, 90, 0]
+  },
+  "title": "Percentage of land zoned Residential per suburb in the future of Outer West Melbourne",
   "layer": [
     {
       "data": {
-        "url": "data/vic_land_use.topojson",
+        "url": "data/vic_bounds_residential.topojson",
         "format": {
           "type": "topojson",
-          "feature": "vic_bounds"
+          "feature": "vic_bounds_residential"
         }
       },
-      "mark": {"type": "geoshape", "stroke": "black", "fill":"white"}
-    },
-    {
-      "data": {
-        "url": "data/vic_land_use.topojson",
-        "format": {
-          "type": "topojson",
-          "feature": "land_use"
-        }
-      },
-      "mark": {"type": "geoshape"},
+      "mark": {"type": "geoshape", "stroke": "black"},
       "encoding": {
-        "color": {"field": "properties.LU_CLASS", "type": "nominal"},
+        "stroke": {
+          "condition": {
+            "test": "datum.properties.residential_pct > 1",
+            "value": "black"
+          },
+          "value": "#555"
+        },
+        "color": {
+          "field": "properties.residential_pct", 
+          "type": "quantitative", 
+          "title": "Residential (%)", 
+          "scale": {"scheme": "blues"},
+          "legend": {
+            "title": "Residential %",
+            "format": ".0f",
+            "titleFontSize": 14,
+            "labelFontSize": 12
+          }},
         "tooltip": [
-          {"field": "properties.LU_CLASS", "type": "nominal"},
-          {"field": "properties.LU_TYPE", "type": "nominal"},
-          {"field": "properties.Area_ha", "type": "quantitative"}
+          {"field": "properties.SAL_NAME21", "type": "nominal", "title": "Area"},
+          {"field": "properties.residential_pct", "type": "quantitative", "title": "Residential Land Use (%)", "format": ".0f"}
         ]
       }
     },
     {
       "data": {
-        "url": "data/vic_land_use.topojson",
+        "url": "data/vic_bounds_residential.topojson",
         "format": {
           "type": "topojson",
-          "feature": "vic_bounds"
+          "feature": "vic_bounds_residential"
         }
       },
-      "mark": "text",
+      "mark": {"type": "text"},
       "encoding": {
-        "text": { "field": "propertiesSAL_NAME21" },
-        "longitude": { "field": "your_lon_field" },
-        "latitude": { "field": "your_lat_field" },
-        "size": { "value": 8 },
-        "color": { "value": "black" }
-      }
+        "text": { "field": "properties.SAL_NAME21" },
+        "longitude": { "field": "properties.LONG" },
+        "latitude": { "field": "properties.LAT" },
+        "size": { "value": 12 },
+        "color": { 
+          "condition": {
+            "test": "datum.properties.residential_pct > 50",
+            "value": "white"
+          },
+          "value": "black"
+        }
+      },
+      "transform": [
+        {
+          "filter": "datum.properties.residential_pct > 1 || datum.properties.area_total > 15000000"
+        }
+      ]
     }
   ]
 }
